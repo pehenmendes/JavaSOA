@@ -3,7 +3,7 @@ package br.com.fiap3espg.autoescola.endereco;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-public record EnderecoDTO(
+public record DadosEndereco(
     @NotBlank
     String logradouro,
 

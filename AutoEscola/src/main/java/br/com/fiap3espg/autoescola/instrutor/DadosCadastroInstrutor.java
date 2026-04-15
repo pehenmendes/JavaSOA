@@ -1,13 +1,13 @@
 package br.com.fiap3espg.autoescola.instrutor;
 
-import br.com.fiap3espg.autoescola.endereco.EnderecoDTO;
+import br.com.fiap3espg.autoescola.endereco.DadosEndereco;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-public record InstrutorDTO(
+public record DadosCadastroInstrutor(
         @NotBlank
         String nome,
 
@@ -23,5 +23,5 @@ public record InstrutorDTO(
         Especialidade especialidade,
 
         @Valid
-        EnderecoDTO endereco) {
+        DadosEndereco endereco) {
 }

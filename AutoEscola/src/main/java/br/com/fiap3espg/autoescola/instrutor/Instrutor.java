@@ -29,11 +29,26 @@ public class Instrutor {
     @Embedded
     private Endereco endereco;
 
-    public Instrutor(InstrutorDTO dados) {
+    public Instrutor(DadosCadastroInstrutor dados) {
         this.nome = dados.nome();
         this.email = dados.email();
         this.cnh = dados.cnh();
         this.especialidade = dados.especialidade();
         this.endereco = new Endereco(dados.endereco());
+    }
+
+    public void atualizarInformacoes(DadosAtualizacaoInstrutor dados) {
+        if (dados.nome() != null && !dados.nome().isBlank()){
+            this.nome = dados.nome();
+        }
+        if (dados.email() != null && !dados.email().isBlank()){
+            this.email = dados.email();
+        }
+        if (dados.especialidade() != null){
+            this.especialidade = dados.especialidade();
+        }
+        if (dados.endereco() != null){
+            this.endereco.atualizarInformacoes(dados.endereco());
+        }
     }
 }

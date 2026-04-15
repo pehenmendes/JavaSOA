@@ -1,6 +1,6 @@
 package br.com.fiap3espg.autoescola.aluno;
 
-import br.com.fiap3espg.autoescola.endereco.EnderecoDTO;
+import br.com.fiap3espg.autoescola.endereco.DadosEndereco;
 
 public record AlunoDTO(
         String nome,
@@ -8,6 +8,6 @@ public record AlunoDTO(
         String telefone,
         String matricula,
         String tipoCarta,
-        EnderecoDTO endereco
+        DadosEndereco endereco
 ) {
 }
