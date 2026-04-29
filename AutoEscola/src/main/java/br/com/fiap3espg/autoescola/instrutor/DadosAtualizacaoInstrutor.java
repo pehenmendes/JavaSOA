@@ -9,6 +9,7 @@ public record DadosAtualizacaoInstrutor(
 
         String nome,
         String email,
+        String telefone,
         Especialidade especialidade,
         DadosEndereco endereco) {
 }

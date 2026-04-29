@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,21 +26,32 @@ public class InstrutorController {
     }
 
     @GetMapping
-    public Page<DadosListagemInstrutor> listarInstrutores(@PageableDefault(size=5) Pageable paginacao) {
-        return repository.findAll(paginacao).map(DadosListagemInstrutor::new);
+    public ResponseEntity<Page<DadosListagemInstrutor>> listarInstrutores(@PageableDefault(size=5) Pageable paginacao) {
+        Page page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemInstrutor::new);
+        return ResponseEntity.ok(page);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DadosDetalhamentoInstrutor> detalharInstrutor(@PathVariable Long id) {
+        Instrutor instrutor = repository.getReferenceById(id);
+        return ResponseEntity.ok(new DadosDetalhamentoInstrutor(instrutor));
     }
 
     @PutMapping
     @Transactional
-    public void atualizarInstrutor(@RequestBody @Valid DadosAtualizacaoInstrutor dados) {
+    public ResponseEntity<DadosDetalhamentoInstrutor> atualizarInstrutor(@RequestBody @Valid DadosAtualizacaoInstrutor dados) {
         Instrutor instrutor = repository.getReferenceById(dados.id());
         instrutor.atualizarInformacoes(dados);
-        repository.save(instrutor);
+        Instrutor saved = repository.save(instrutor);
+        return ResponseEntity.ok(new DadosDetalhamentoInstrutor(saved));
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public void excluirInstrutor(@PathVariable Long id){
-        repository.deleteById(id);
+    public ResponseEntity<Void> excluirInstrutor(@PathVariable Long id){
+        Instrutor instrutor = repository.getReferenceById(id);
+        instrutor.excluir();
+        repository.save(instrutor);
+        return ResponseEntity.noContent().build();
     }
 }
