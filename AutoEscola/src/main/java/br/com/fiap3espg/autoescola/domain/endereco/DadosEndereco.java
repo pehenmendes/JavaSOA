@@ -1,4 +1,4 @@
-package br.com.fiap3espg.autoescola.endereco;
+package br.com.fiap3espg.autoescola.domain.endereco;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

@@ -1,6 +1,7 @@
 package br.com.fiap3espg.autoescola.controller;
 
-import br.com.fiap3espg.autoescola.instrutor.*;
+import br.com.fiap3espg.autoescola.domain.instrutor.*;
+import br.com.fiap3espg.autoescola.service.InstrutorService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,49 +10,44 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/instrutores")
 public class InstrutorController {
     @Autowired
-    private InstrutorRepository repository;
+    private InstrutorService service;
 
     @PostMapping
-    @Transactional
-    public void cadastrarInstrutor(@RequestBody @Valid DadosCadastroInstrutor dados) {
-        Instrutor instrutor = new Instrutor(dados);
-        repository.save(instrutor);
+    public ResponseEntity<DadosDetalhamentoInstrutor> cadastrarInstrutor(
+            @RequestBody @Valid DadosCadastroInstrutor dados,
+            UriComponentsBuilder uriBuilder) {
+        URI uri = uriBuilder.buildAndExpand("instrutores/{id}").toUri();
+        return ResponseEntity.created(uri).body(service.cadastrarInstrutor(dados));
     }
 
     @GetMapping
-    public ResponseEntity<Page<DadosListagemInstrutor>> listarInstrutores(@PageableDefault(size=5) Pageable paginacao) {
-        Page page = repository.findAllByAtivoTrue(paginacao).map(DadosListagemInstrutor::new);
-        return ResponseEntity.ok(page);
+    public ResponseEntity<Page<DadosListagemInstrutor>> listarInstrutores(
+            @PageableDefault(size=5) Pageable paginacao) {
+        return ResponseEntity.ok(service.listarInstrutores(paginacao));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DadosDetalhamentoInstrutor> detalharInstrutor(@PathVariable Long id) {
-        Instrutor instrutor = repository.getReferenceById(id);
-        return ResponseEntity.ok(new DadosDetalhamentoInstrutor(instrutor));
+        return ResponseEntity.ok(service.detalharInstrutor(id));
     }
 
     @PutMapping
-    @Transactional
-    public ResponseEntity<DadosDetalhamentoInstrutor> atualizarInstrutor(@RequestBody @Valid DadosAtualizacaoInstrutor dados) {
-        Instrutor instrutor = repository.getReferenceById(dados.id());
-        instrutor.atualizarInformacoes(dados);
-        Instrutor saved = repository.save(instrutor);
-        return ResponseEntity.ok(new DadosDetalhamentoInstrutor(saved));
+    public ResponseEntity<DadosDetalhamentoInstrutor> atualizarInstrutor(
+            @RequestBody @Valid DadosAtualizacaoInstrutor dados) {
+        return ResponseEntity.ok(service.atualizarInstrutor(dados));
     }
 
     @DeleteMapping("/{id}")
-    @Transactional
     public ResponseEntity<Void> excluirInstrutor(@PathVariable Long id){
-        Instrutor instrutor = repository.getReferenceById(id);
-        instrutor.excluir();
-        repository.save(instrutor);
+        service.deleteInstrutor(id);
         return ResponseEntity.noContent().build();
     }
 }

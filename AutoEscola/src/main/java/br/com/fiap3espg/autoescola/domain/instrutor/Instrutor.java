@@ -1,7 +1,7 @@
-package br.com.fiap3espg.autoescola.instrutor;
+package br.com.fiap3espg.autoescola.domain.instrutor;
 
 
-import br.com.fiap3espg.autoescola.endereco.Endereco;
+import br.com.fiap3espg.autoescola.domain.endereco.Endereco;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

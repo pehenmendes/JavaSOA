@@ -1,6 +1,6 @@
 package br.com.fiap3espg.autoescola.controller;
 
-import br.com.fiap3espg.autoescola.aluno.AlunoDTO;
+import br.com.fiap3espg.autoescola.domain.aluno.AlunoDTO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

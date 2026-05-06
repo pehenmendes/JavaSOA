@@ -1,4 +1,4 @@
-package br.com.fiap3espg.autoescola.endereco;
+package br.com.fiap3espg.autoescola.domain.endereco;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

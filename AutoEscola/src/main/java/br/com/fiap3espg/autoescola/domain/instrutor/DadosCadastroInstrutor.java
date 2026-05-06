@@ -1,6 +1,6 @@
-package br.com.fiap3espg.autoescola.instrutor;
+package br.com.fiap3espg.autoescola.domain.instrutor;
 
-import br.com.fiap3espg.autoescola.endereco.DadosEndereco;
+import br.com.fiap3espg.autoescola.domain.endereco.DadosEndereco;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
-package br.com.fiap3espg.autoescola.aluno;
+package br.com.fiap3espg.autoescola.domain.aluno;
 
-import br.com.fiap3espg.autoescola.endereco.DadosEndereco;
+import br.com.fiap3espg.autoescola.domain.endereco.DadosEndereco;
 
 public record AlunoDTO(
         String nome,

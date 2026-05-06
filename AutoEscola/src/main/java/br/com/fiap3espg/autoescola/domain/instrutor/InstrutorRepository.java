@@ -1,6 +1,5 @@
-package br.com.fiap3espg.autoescola.instrutor;
+package br.com.fiap3espg.autoescola.domain.instrutor;
 
-import aj.org.objectweb.asm.commons.Remapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
