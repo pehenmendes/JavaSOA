@@ -1,4 +1,4 @@
-package br.com.fiap3espg.autoescola.infra;
+package br.com.fiap3espg.autoescola.infra.exception;
 
 import br.com.fiap3espg.autoescola.domain.instrutor.InstrutorNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
