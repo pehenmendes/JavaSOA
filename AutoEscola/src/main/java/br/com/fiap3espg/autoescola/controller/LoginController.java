@@ -1,6 +1,9 @@
 package br.com.fiap3espg.autoescola.controller;
 
 import br.com.fiap3espg.autoescola.domain.usuario.DadosLogin;
+import br.com.fiap3espg.autoescola.domain.usuario.DadosTokenJWT;
+import br.com.fiap3espg.autoescola.domain.usuario.Usuario;
+import br.com.fiap3espg.autoescola.infra.security.TokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LoginController {
     private final AuthenticationManager manager;
+    private final TokenService tokenService;
 
     @PostMapping
     public ResponseEntity efetuarLogin(@RequestBody @Valid DadosLogin dados){
         var token = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
         Authentication authentication = manager.authenticate(token);
-        return ResponseEntity.ok(token);
+        String tokenJWT = tokenService.generateToken((Usuario) authentication.getPrincipal());
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 }
