@@ -25,11 +25,13 @@ public class Usuario implements UserDetails {
     private Long id;
     private String login;
     private String senha;
-    //private Role perfil;
+
+    @Enumerated(EnumType.STRING)
+    private Role perfil;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + perfil.name()));
     }
 
     @Override
