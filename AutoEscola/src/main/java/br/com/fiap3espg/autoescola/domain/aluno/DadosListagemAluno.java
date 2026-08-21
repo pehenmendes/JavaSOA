@@ -7,7 +7,7 @@ public record DadosListagemAluno(
         String nome,
         String email,
         String matricula,
-        String tipoCarta) {
+        TipoCarta tipoCarta) {
     public DadosListagemAluno(Aluno aluno) {
         this(
                 aluno.getId(),

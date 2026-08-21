@@ -9,7 +9,7 @@ public record DadosAtualizacaoAluno(
         String nome,
         String email,
         String telefone,
-        String tipoCarta,
+        TipoCarta tipoCarta,
         DadosEndereco endereco
 ) {
 }

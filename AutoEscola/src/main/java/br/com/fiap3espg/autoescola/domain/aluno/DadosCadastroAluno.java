@@ -24,7 +24,7 @@ public record DadosCadastroAluno(
         String matricula,
 
         @NotNull
-        String tipoCarta,
+        TipoCarta tipoCarta,
 
         @Valid
         DadosEndereco endereco) {

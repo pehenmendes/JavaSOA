@@ -9,7 +9,7 @@ public record DadosDetalhamentoAluno(
         String telefone,
         String cpf,
         String matricula,
-        String tipoCarta,
+        TipoCarta tipoCarta,
         DadosEndereco endereco,
         boolean ativo
 ) {

@@ -25,7 +25,7 @@ public class Aluno {
     private String matricula;
 
     @Enumerated(EnumType.STRING)
-    private String tipoCarta;
+    private TipoCarta tipoCarta;
 
     @Embedded
     private Endereco endereco;
