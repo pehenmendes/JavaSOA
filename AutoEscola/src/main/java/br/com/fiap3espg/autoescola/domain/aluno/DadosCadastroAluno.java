@@ -19,6 +19,13 @@ public record DadosCadastroAluno(
         @Pattern(regexp = "\\d{9,11}")
         String cpf,
 
+        @NotNull
+        @Pattern(regexp = "\\d{5}")
+        String matricula,
+
+        @NotNull
+        String tipoCarta,
+
         @Valid
         DadosEndereco endereco) {
 }

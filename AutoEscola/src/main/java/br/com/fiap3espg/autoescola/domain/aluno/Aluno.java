@@ -23,6 +23,8 @@ public class Aluno {
     private String telefone;
     private String cpf;
     private String matricula;
+
+    @Enumerated(EnumType.STRING)
     private String tipoCarta;
 
     @Embedded
@@ -34,6 +36,8 @@ public class Aluno {
         this.email = dados.email();
         this.telefone = dados.telefone();
         this.cpf = dados.cpf();
+        this.matricula = dados.matricula();
+        this.tipoCarta = dados.tipoCarta();
         this.endereco = new Endereco(dados.endereco());
     }
 
