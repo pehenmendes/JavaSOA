@@ -5,7 +5,7 @@ create table alunos(
     telefone varchar(20),
     cpf varchar(11) not null unique,
     matricula varchar(5) not null unique,
-    tipoCarta varchar(20) not null,
+    tipo_carta varchar(20) not null,
     logradouro varchar(100) not null,
     numero varchar(10),
     complemento varchar(20),
