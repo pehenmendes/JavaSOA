@@ -4,11 +4,16 @@ import br.com.fiap3espg.autoescola.domain.aluno.Aluno;
 import br.com.fiap3espg.autoescola.domain.aluno.AlunoNotFoundException;
 import br.com.fiap3espg.autoescola.domain.aluno.AlunoRepository;
 import br.com.fiap3espg.autoescola.domain.instrucao.*;
+import br.com.fiap3espg.autoescola.domain.instrucao.validacao.ValidadorAgendamento;
+import br.com.fiap3espg.autoescola.domain.instrucao.validacao.ValidadorAlunoAtivo;
+import br.com.fiap3espg.autoescola.domain.instrucao.validacao.ValidadorInstrutorAtivo;
 import br.com.fiap3espg.autoescola.domain.instrutor.Instrutor;
 import br.com.fiap3espg.autoescola.domain.instrutor.InstrutorNotFoundException;
 import br.com.fiap3espg.autoescola.domain.instrutor.InstrutorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +21,7 @@ public class InstrucaoService {
     private final InstrucaoRepository repository;
     private final AlunoRepository alunoRepository;
     private final InstrutorRepository instrutorRepository;
+    private final List<ValidadorAgendamento> validadoresAgendamento;
 
     public DadosDetalhamentoAgendamento agendarInstrucao(DadosAgendamentoInstrucao dados) {
         if (!alunoRepository.existsById(dados.idAluno())) {
@@ -24,6 +30,9 @@ public class InstrucaoService {
         if (dados.idInstrutor() != null && !instrutorRepository.existsById(dados.idInstrutor())){
             throw new InstrutorNotFoundException("ID do instrutor informado não existe");
         }
+        // Validações
+        validadoresAgendamento.forEach(validador -> validador.validar(dados));
+
         Aluno aluno = alunoRepository.getReferenceById(dados.idAluno());
         Instrutor instrutor = escolherInstrutor(dados);
 
