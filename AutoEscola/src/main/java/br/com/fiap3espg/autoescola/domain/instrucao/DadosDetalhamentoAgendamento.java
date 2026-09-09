@@ -10,6 +10,7 @@ public record DadosDetalhamentoAgendamento(
         String nomeAluno,
         String nomeInstrutor,
         Especialidade especialidade,
+        boolean ativo,
 
         @JsonFormat(pattern = "dd/MM/yyyy - HH:mm")
         LocalDateTime dataHora) {
@@ -19,6 +20,7 @@ public record DadosDetalhamentoAgendamento(
                 instrucao.getAluno().getNome(),
                 instrucao.getInstrutor().getNome(),
                 instrucao.getInstrutor().getEspecialidade(),
+                instrucao.isAtivo(),
                 instrucao.getDataHora()
         );
     }

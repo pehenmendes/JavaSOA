@@ -30,4 +30,10 @@ public class Instrucao {
     private Instrutor instrutor;
     @Column(name = "data_hora")
     private LocalDateTime dataHora;
+
+    private boolean ativo = true;
+
+    public void cancelar(){
+        this.ativo = false;
+    }
 }

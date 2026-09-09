@@ -29,6 +29,36 @@ public class Usuario implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role perfil;
 
+    private boolean ativo = true;
+
+    public Usuario(DadosCadastroUsuario dados){
+        this.login = dados.login();
+        this.senha = dados.senha();
+        this.perfil = dados.perfil();
+    }
+
+    public void atualizarInformacoes(DadosAtualizacaoUsuario dados) {
+        if (dados.login() != null && !dados.login().isBlank()) {
+            this.login = dados.login();
+        }
+        if (dados.senha() != null && !dados.senha().isBlank()) {
+            this.senha = dados.senha();
+        }
+        if (dados.perfil() != null) {
+            this.perfil = dados.perfil();
+        }
+    }
+
+    public void atualizarSenha(DadosAtualizarSenhaUsuario dados) {
+        if (dados.senha() != null && !dados.senha().isBlank()) {
+            this.senha = dados.senha();
+        }
+    }
+
+    public void excluir() {
+        this.ativo = false;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + perfil.name()));
@@ -61,6 +91,9 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
+        if (!ativo) {
+            return false;
+        }
         return true;
     }
 }

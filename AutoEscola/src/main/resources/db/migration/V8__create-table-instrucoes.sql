@@ -3,6 +3,7 @@ create table instrucoes (
     aluno_id bigint not null,
     instrutor_id bigint not null,
     data_hora datetime not null,
+    ativo tinyint default 1,
 
     primary key (id),
     constraint fk_instrucoes_aluno_id foreign key (aluno_id) references alunos(id),

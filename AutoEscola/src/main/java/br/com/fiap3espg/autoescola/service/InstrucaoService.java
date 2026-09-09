@@ -40,9 +40,17 @@ public class InstrucaoService {
             throw new ValidacaoException("Nenhum instrutor disponivel para a data/hora informada");
         }
 
-        Instrucao instrucao = new Instrucao(null, aluno, instrutor, dados.dataHora());
+        Instrucao instrucao = new Instrucao(null, aluno, instrutor, dados.dataHora(), true);
         Instrucao salvo = repository.save(instrucao);
         return new DadosDetalhamentoAgendamento(salvo);
+    }
+
+    public void cancelarInstrucao(Long id){
+        Instrucao instrucao = repository
+                .findById(id)
+                .orElseThrow(() -> new InstrutorNotFoundException("ID do agendamento não existe"));
+        instrucao.cancelar();
+        repository.save(instrucao);
     }
 
     private Instrutor escolherInstrutor(DadosAgendamentoInstrucao dados) {
