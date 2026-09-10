@@ -9,6 +9,8 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode(of = "id")
 public class Usuario implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -41,17 +44,14 @@ public class Usuario implements UserDetails {
         if (dados.login() != null && !dados.login().isBlank()) {
             this.login = dados.login();
         }
-        if (dados.senha() != null && !dados.senha().isBlank()) {
-            this.senha = dados.senha();
-        }
         if (dados.perfil() != null) {
             this.perfil = dados.perfil();
         }
     }
 
     public void atualizarSenha(DadosAtualizarSenhaUsuario dados) {
-        if (dados.senha() != null && !dados.senha().isBlank()) {
-            this.senha = dados.senha();
+        if (dados.senhaAtual() != null && !dados.senhaAtual().isBlank()) {
+            this.senha = dados.senhaNova();
         }
     }
 

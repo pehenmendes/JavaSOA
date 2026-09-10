@@ -5,12 +5,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UsuarioRepository repository;
+    private final PasswordEncoder encoder;
 
     @Transactional
     public DadosDetalhamentoUsuario cadastrarUsuario(DadosCadastroUsuario dados) {
@@ -45,6 +47,9 @@ public class UserService {
         Usuario usuario = repository
                 .findById(dados.id())
                 .orElseThrow(() -> new UsuarioNotFoundException("ID do usuário não existe"));
+        if (!encoder.matches(dados.senhaAtual(), usuario.getSenha())) {
+            throw new SenhaIguaisException("Utilize uma senha diferente da anterior");
+        }
         usuario.atualizarSenha(dados);
         Usuario saved = repository.save(usuario);
         return new DadosDetalhamentoUsuario(saved);
@@ -55,7 +60,7 @@ public class UserService {
                 .findById(id)
                 .orElseThrow(() -> new UsuarioNotFoundException("ID do usuário não existe"));
         usuario.excluir();
-        Usuario saved = repository.save(usuario);
+        repository.save(usuario);
     }
 
 }

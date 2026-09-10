@@ -6,7 +6,6 @@ public record DadosAtualizacaoUsuario(
         @NotNull
         Long id,
         String login,
-        String senha,
         Role perfil
 ) {
 }
