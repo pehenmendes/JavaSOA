@@ -5,6 +5,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +18,7 @@ public class UserService {
 
     @Transactional
     public DadosDetalhamentoUsuario cadastrarUsuario(DadosCadastroUsuario dados) {
-        Usuario usuario = new Usuario(dados);
+        Usuario usuario = new Usuario(dados, encoder.encode(dados.senha()));
         Usuario saved = repository.save(usuario);
         return new DadosDetalhamentoUsuario(saved);
     }
@@ -43,15 +45,24 @@ public class UserService {
     }
 
     @Transactional
-    public DadosDetalhamentoUsuario atualizarSenha(DadosAtualizarSenhaUsuario dados) {
-        Usuario usuario = repository
+    public DadosDetalhamentoUsuario atualizarSenha(DadosAtualizarSenhaUsuario dados, Authentication auth) {
+        Usuario usuarioAlvo = repository
                 .findById(dados.id())
                 .orElseThrow(() -> new UsuarioNotFoundException("ID do usuário não existe"));
-        if (!encoder.matches(dados.senhaAtual(), usuario.getSenha())) {
+        Usuario usuarioLogado = (Usuario) auth.getPrincipal();
+
+        if (usuarioLogado.getPerfil() == Role.USER
+                && !usuarioLogado.getId().equals(usuarioAlvo.getId())) {
+
+            throw new AccessDeniedException("Você só pode alterar sua própria senha");
+        }
+
+        if (encoder.matches(dados.senhaAtual(), usuarioAlvo.getSenha())) {
             throw new SenhaIguaisException("Utilize uma senha diferente da anterior");
         }
-        usuario.atualizarSenha(dados);
-        Usuario saved = repository.save(usuario);
+
+        usuarioAlvo.atualizarSenha(dados.senhaAtual(), encoder.encode(dados.senhaNova()));
+        Usuario saved = repository.save(usuarioAlvo);
         return new DadosDetalhamentoUsuario(saved);
     }
 

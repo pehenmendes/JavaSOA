@@ -9,8 +9,6 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,14 +28,22 @@ public class Usuario implements UserDetails {
     private String senha;
 
     @Enumerated(EnumType.STRING)
-    private Role perfil;
+    private Role perfil = Role.USER;
 
     private boolean ativo = true;
 
-    public Usuario(DadosCadastroUsuario dados){
+    public Usuario(DadosCadastroUsuario dados, String senha){
         this.login = dados.login();
-        this.senha = dados.senha();
-        this.perfil = dados.perfil();
+        this.senha = senha;
+        if (dados.perfil() != null) {
+            this.perfil = dados.perfil();
+        }
+    }
+
+    public Usuario(String login, String senha, Role perfil) {
+        this.login = login;
+        this.senha = senha;
+        this.perfil = perfil;
     }
 
     public void atualizarInformacoes(DadosAtualizacaoUsuario dados) {
@@ -49,9 +55,10 @@ public class Usuario implements UserDetails {
         }
     }
 
-    public void atualizarSenha(DadosAtualizarSenhaUsuario dados) {
-        if (dados.senhaAtual() != null && !dados.senhaAtual().isBlank()) {
-            this.senha = dados.senhaNova();
+    public void atualizarSenha(String senhaAtual, String senhaNova) {
+        if ( (senhaAtual != null && !senhaAtual.isBlank()) &&
+                (senhaNova != null && !senhaNova.isBlank()) ){
+            this.senha = senhaNova;
         }
     }
 

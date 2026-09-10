@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -37,12 +38,12 @@ public class UserController {
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<DadosListagemUsuario>> listarUsuarios(
-            @PageableDefault(size=10, sort="id") Pageable paginacao
+            @PageableDefault(size=5) Pageable paginacao
     ) {
         return ResponseEntity.ok(service.listarUsuarios(paginacao));
     }
 
-    @GetMapping
+    @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<DadosDetalhamentoUsuario> detalharUsuarios(@PathVariable Long id){
         return ResponseEntity.ok(service.detalharUsuario(id));
@@ -56,15 +57,16 @@ public class UserController {
         return ResponseEntity.ok(service.atualizarUsuario(dados));
     }
 
-    @PutMapping
+    @PatchMapping("/{id}/senha")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<DadosDetalhamentoUsuario> atualizarSenhaUsuario(
-            @RequestBody @Valid DadosAtualizarSenhaUsuario dados
+            @RequestBody @Valid DadosAtualizarSenhaUsuario dados,
+            Authentication authentication
     ) {
-        return ResponseEntity.ok(service.atualizarSenha(dados));
+        return ResponseEntity.ok(service.atualizarSenha(dados, authentication));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> excluirUsuario(@PathVariable Long id){
         service.excluirUsuario(id);
