@@ -28,7 +28,7 @@ public class InstrucaoController {
         return ResponseEntity.ok(service.agendarInstrucao(dados));
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> cancelarInstrucao(@PathVariable Long id){
         service.cancelarInstrucao(id);
