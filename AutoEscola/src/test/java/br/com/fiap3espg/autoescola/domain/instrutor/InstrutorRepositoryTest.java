@@ -1,9 +1,12 @@
 package br.com.fiap3espg.autoescola.domain.instrutor;
 
-import br.com.fiap3espg.autoescola.domain.aluno.Aluno;
-import br.com.fiap3espg.autoescola.domain.aluno.TipoCarta;
-import br.com.fiap3espg.autoescola.domain.endereco.Endereco;
-import br.com.fiap3espg.autoescola.domain.instrucao.Instrucao;
+import br.com.fiap3espg.autoescola.application.core.domain.Aluno;
+import br.com.fiap3espg.autoescola.common.vo.enumeration.TipoCarta;
+import br.com.fiap3espg.autoescola.common.vo.endereco.Endereco;
+import br.com.fiap3espg.autoescola.application.core.domain.Instrucao;
+import br.com.fiap3espg.autoescola.common.vo.enumeration.Especialidade;
+import br.com.fiap3espg.autoescola.application.core.domain.Instrutor;
+import br.com.fiap3espg.autoescola.application.port.out.InstrutorRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

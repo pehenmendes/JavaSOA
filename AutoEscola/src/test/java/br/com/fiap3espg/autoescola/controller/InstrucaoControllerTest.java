@@ -1,8 +1,8 @@
 package br.com.fiap3espg.autoescola.controller;
 
-import br.com.fiap3espg.autoescola.domain.instrucao.DadosAgendamentoInstrucao;
-import br.com.fiap3espg.autoescola.domain.instrucao.DadosDetalhamentoAgendamento;
-import br.com.fiap3espg.autoescola.service.InstrucaoService;
+import br.com.fiap3espg.autoescola.adapter.in.controller.request.instrucao.DadosAgendamentoInstrucao;
+import br.com.fiap3espg.autoescola.adapter.in.controller.response.instrucao.DadosDetalhamentoAgendamento;
+import br.com.fiap3espg.autoescola.application.service.InstrucaoService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
