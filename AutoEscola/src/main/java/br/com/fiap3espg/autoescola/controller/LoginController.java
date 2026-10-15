@@ -1,7 +1,7 @@
 package br.com.fiap3espg.autoescola.controller;
 
 import br.com.fiap3espg.autoescola.domain.usuario.DadosLogin;
-import br.com.fiap3espg.autoescola.domain.usuario.DadosTokenJWT;
+import br.com.fiap3espg.autoescola.infra.security.DadosTokenJWT;
 import br.com.fiap3espg.autoescola.domain.usuario.Usuario;
 import br.com.fiap3espg.autoescola.infra.security.TokenService;
 import jakarta.validation.Valid;
@@ -23,7 +23,7 @@ public class LoginController {
     private final TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity efetuarLogin(@RequestBody @Valid DadosLogin dados){
+    public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody @Valid DadosLogin dados){
         var token = new UsernamePasswordAuthenticationToken(dados.login(), dados.senha());
         Authentication authentication = manager.authenticate(token);
         String tokenJWT = tokenService.generateToken((Usuario) authentication.getPrincipal());

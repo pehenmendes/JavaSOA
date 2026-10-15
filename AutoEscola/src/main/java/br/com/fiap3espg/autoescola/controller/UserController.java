@@ -2,6 +2,7 @@ package br.com.fiap3espg.autoescola.controller;
 
 import br.com.fiap3espg.autoescola.domain.usuario.*;
 import br.com.fiap3espg.autoescola.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,6 +18,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/usuarios")
+@SecurityRequirement(name = "bearer-key")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService service;
@@ -60,10 +62,11 @@ public class UserController {
     @PatchMapping("/{id}/senha")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<DadosDetalhamentoUsuario> atualizarSenhaUsuario(
+            @PathVariable Long id,
             @RequestBody @Valid DadosAtualizarSenhaUsuario dados,
             Authentication authentication
     ) {
-        return ResponseEntity.ok(service.atualizarSenha(dados, authentication));
+        return ResponseEntity.ok(service.atualizarSenha(id, dados, authentication));
     }
 
     @DeleteMapping("/{id}")

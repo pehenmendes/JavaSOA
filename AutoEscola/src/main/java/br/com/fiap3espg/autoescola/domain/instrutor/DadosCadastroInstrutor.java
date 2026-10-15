@@ -19,12 +19,13 @@ public record DadosCadastroInstrutor(
         String telefone,
 
         @NotBlank
-        @Pattern(regexp = "\\d{9,11}")
+        @Pattern(regexp = "\\d{11}")
         String cnh,
 
         @NotNull
         Especialidade especialidade,
 
+        @NotNull
         @Valid
         DadosEndereco endereco) {
 }

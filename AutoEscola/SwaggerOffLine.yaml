@@ -403,8 +403,6 @@ components:
           format: int64
         login:
           type: string
-        senha:
-          type: string
         perfil:
           type: string
           enum:
@@ -678,15 +676,16 @@ components:
     DadosAtualizarSenhaUsuario:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
         senhaAtual:
           type: string
+          minLength: 1
         senhaNova:
           type: string
+          minLength: 6
+          maxLength: 72
       required:
-        - id
+        - senhaAtual
+        - senhaNova
     Pageable:
       type: object
       properties:

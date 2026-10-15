@@ -8,4 +8,4 @@ create table instrucoes (
     primary key (id),
     constraint fk_instrucoes_aluno_id foreign key (aluno_id) references alunos(id),
     constraint fk_instrucoes_instrutor_id foreign key (instrutor_id) references instrutores(id)
-)
+);

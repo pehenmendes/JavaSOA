@@ -83,7 +83,7 @@ public class InstrutorRepositoryTest {
                 "alunoteste@email.com",
                 "(11) 91234-5678",
                 "12345678901",
-                "123456",
+                "12345",
                 TipoCarta.CAT_A,
                 dadosEndereco(),
                 true

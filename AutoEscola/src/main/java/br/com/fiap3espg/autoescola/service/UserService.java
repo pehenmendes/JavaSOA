@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private static final String USUARIO_NAO_EXISTE = "ID do usuário não existe";
+
     private final UsuarioRepository repository;
     private final PasswordEncoder encoder;
 
@@ -28,50 +30,52 @@ public class UserService {
     }
 
     public DadosDetalhamentoUsuario detalharUsuario(Long id) {
-        Usuario usuario = repository
-                .findById(id)
-                .orElseThrow(() -> new UsuarioNotFoundException("ID do usuário não existe"));
-        return new DadosDetalhamentoUsuario(usuario);
+        return new DadosDetalhamentoUsuario(buscarAtivo(id));
     }
 
     @Transactional
     public DadosDetalhamentoUsuario atualizarUsuario(DadosAtualizacaoUsuario dados) {
-        Usuario usuario = repository
-                .findById(dados.id())
-                .orElseThrow(() -> new UsuarioNotFoundException("ID do usuário não existe"));
+        Usuario usuario = buscarAtivo(dados.id());
         usuario.atualizarInformacoes(dados);
         Usuario saved = repository.save(usuario);
         return new DadosDetalhamentoUsuario(saved);
     }
 
     @Transactional
-    public DadosDetalhamentoUsuario atualizarSenha(DadosAtualizarSenhaUsuario dados, Authentication auth) {
-        Usuario usuarioAlvo = repository
-                .findById(dados.id())
-                .orElseThrow(() -> new UsuarioNotFoundException("ID do usuário não existe"));
+    public DadosDetalhamentoUsuario atualizarSenha(
+            Long id, DadosAtualizarSenhaUsuario dados, Authentication auth) {
+        Usuario usuarioAlvo = buscarAtivo(id);
         Usuario usuarioLogado = (Usuario) auth.getPrincipal();
 
         if (usuarioLogado.getPerfil() == Role.USER
                 && !usuarioLogado.getId().equals(usuarioAlvo.getId())) {
-
             throw new AccessDeniedException("Você só pode alterar sua própria senha");
         }
 
-        if (encoder.matches(dados.senhaAtual(), usuarioAlvo.getSenha())) {
+        if (!encoder.matches(dados.senhaAtual(), usuarioAlvo.getSenha())) {
+            throw new SenhaAtualIncorretaException("Senha atual incorreta");
+        }
+
+        if (dados.senhaAtual().equals(dados.senhaNova())) {
             throw new SenhaIguaisException("Utilize uma senha diferente da anterior");
         }
 
-        usuarioAlvo.atualizarSenha(dados.senhaAtual(), encoder.encode(dados.senhaNova()));
+        usuarioAlvo.atualizarSenha(encoder.encode(dados.senhaNova()));
         Usuario saved = repository.save(usuarioAlvo);
         return new DadosDetalhamentoUsuario(saved);
     }
 
+    @Transactional
     public void excluirUsuario(Long id) {
-        Usuario usuario = repository
-                .findById(id)
-                .orElseThrow(() -> new UsuarioNotFoundException("ID do usuário não existe"));
+        Usuario usuario = buscarAtivo(id);
         usuario.excluir();
         repository.save(usuario);
     }
 
+    private Usuario buscarAtivo(Long id) {
+        return repository
+                .findById(id)
+                .filter(Usuario::isAtivo)
+                .orElseThrow(() -> new UsuarioNotFoundException(USUARIO_NAO_EXISTE));
+    }
 }

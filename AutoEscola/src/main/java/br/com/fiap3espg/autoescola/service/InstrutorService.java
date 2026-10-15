@@ -2,9 +2,7 @@ package br.com.fiap3espg.autoescola.service;
 
 import br.com.fiap3espg.autoescola.domain.instrutor.*;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,13 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class InstrutorService {
+    private static final String INSTRUTOR_NAO_EXISTE = "ID do instrutor informado não existe!";
+
     private final InstrutorRepository repository;
 
     @Transactional
     public DadosDetalhamentoInstrutor cadastrarInstrutor(DadosCadastroInstrutor dados) {
-//        Instrutor instrutor = new Instrutor(dados);
-//        Instrutor saved = repository.save(instrutor);
-//        return new DadosDetalhamentoInstrutor(saved);
         return new DadosDetalhamentoInstrutor(repository.save(new Instrutor(dados)));
     }
 
@@ -27,17 +24,12 @@ public class InstrutorService {
     }
 
     public DadosDetalhamentoInstrutor detalharInstrutor(Long id) {
-        Instrutor instrutor = repository.findById(id)
-                .orElseThrow(() ->
-                        new InstrutorNotFoundException("ID do instrutor informado não exite!"));
-        return new DadosDetalhamentoInstrutor(instrutor);
+        return new DadosDetalhamentoInstrutor(buscarAtivo(id));
     }
 
     @Transactional
-    public DadosDetalhamentoInstrutor atualizarInstrutor(@Valid DadosAtualizacaoInstrutor dados) {
-        Instrutor instrutor = repository.findById(dados.id())
-                .orElseThrow(() ->
-                        new InstrutorNotFoundException("ID do instrutor informado não exite!"));
+    public DadosDetalhamentoInstrutor atualizarInstrutor(DadosAtualizacaoInstrutor dados) {
+        Instrutor instrutor = buscarAtivo(dados.id());
         instrutor.atualizarInformacoes(dados);
         Instrutor saved = repository.save(instrutor);
         return new DadosDetalhamentoInstrutor(saved);
@@ -45,10 +37,14 @@ public class InstrutorService {
 
     @Transactional
     public void deleteInstrutor(Long id) {
-        Instrutor instrutor = repository.findById(id)
-                .orElseThrow(() ->
-                        new InstrutorNotFoundException("ID do instrutor informado não exite!"));
+        Instrutor instrutor = buscarAtivo(id);
         instrutor.excluir();
         repository.save(instrutor);
+    }
+
+    private Instrutor buscarAtivo(Long id) {
+        return repository.findById(id)
+                .filter(Instrutor::isAtivo)
+                .orElseThrow(() -> new InstrutorNotFoundException(INSTRUTOR_NAO_EXISTE));
     }
 }

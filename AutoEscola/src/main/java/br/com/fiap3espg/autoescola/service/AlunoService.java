@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AlunoService {
+    private static final String ALUNO_NAO_EXISTE = "ID do aluno não existe!";
+
     private final AlunoRepository repository;
 
     @Transactional
@@ -24,27 +26,28 @@ public class AlunoService {
     }
 
     public DadosDetalhamentoAluno detalharAluno(Long id) {
-        Aluno aluno = repository
-                .findById(id)
-                .orElseThrow(() -> new AlunoNotFoundException("ID do aluno não existe!"));
-        return new DadosDetalhamentoAluno(aluno);
+        return new DadosDetalhamentoAluno(buscarAtivo(id));
     }
 
     @Transactional
     public DadosDetalhamentoAluno atualizarAluno(DadosAtualizacaoAluno dados) {
-        Aluno aluno = repository
-                .findById(dados.id())
-                .orElseThrow(() -> new AlunoNotFoundException("ID do aluno não existe!"));
+        Aluno aluno = buscarAtivo(dados.id());
         aluno.atualizarInformacoes(dados);
         Aluno saved = repository.save(aluno);
         return new DadosDetalhamentoAluno(saved);
     }
 
+    @Transactional
     public void excluirAluno(Long id) {
-        Aluno aluno = repository
-                .findById(id)
-                .orElseThrow(() -> new AlunoNotFoundException("ID do aluno não existe!"));
+        Aluno aluno = buscarAtivo(id);
         aluno.excluir();
         repository.save(aluno);
+    }
+
+    private Aluno buscarAtivo(Long id) {
+        return repository
+                .findById(id)
+                .filter(Aluno::isAtivo)
+                .orElseThrow(() -> new AlunoNotFoundException(ALUNO_NAO_EXISTE));
     }
 }

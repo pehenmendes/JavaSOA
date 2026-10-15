@@ -3,12 +3,14 @@ package br.com.fiap3espg.autoescola.infra.security;
 import br.com.fiap3espg.autoescola.domain.usuario.Role;
 import br.com.fiap3espg.autoescola.domain.usuario.Usuario;
 import br.com.fiap3espg.autoescola.domain.usuario.UsuarioRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+@Slf4j
 @Configuration
 public class AdminInitializer {
     @Value("${admin.senha}")
@@ -32,7 +34,7 @@ public class AdminInitializer {
 
                 repository.save(admin);
 
-                System.out.println("Usuário ADMIN criado com sucesso!");
+                log.info("Usuário ADMIN criado com sucesso!");
             }
         };
     }

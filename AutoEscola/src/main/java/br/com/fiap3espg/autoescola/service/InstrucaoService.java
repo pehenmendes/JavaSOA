@@ -5,11 +5,10 @@ import br.com.fiap3espg.autoescola.domain.aluno.AlunoNotFoundException;
 import br.com.fiap3espg.autoescola.domain.aluno.AlunoRepository;
 import br.com.fiap3espg.autoescola.domain.instrucao.*;
 import br.com.fiap3espg.autoescola.domain.instrucao.validacao.ValidadorAgendamento;
-import br.com.fiap3espg.autoescola.domain.instrucao.validacao.ValidadorAlunoAtivo;
-import br.com.fiap3espg.autoescola.domain.instrucao.validacao.ValidadorInstrutorAtivo;
 import br.com.fiap3espg.autoescola.domain.instrutor.Instrutor;
 import br.com.fiap3espg.autoescola.domain.instrutor.InstrutorNotFoundException;
 import br.com.fiap3espg.autoescola.domain.instrutor.InstrutorRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +22,20 @@ public class InstrucaoService {
     private final InstrutorRepository instrutorRepository;
     private final List<ValidadorAgendamento> validadoresAgendamento;
 
+    @Transactional
     public DadosDetalhamentoAgendamento agendarInstrucao(DadosAgendamentoInstrucao dados) {
         if (!alunoRepository.existsById(dados.idAluno())) {
             throw new AlunoNotFoundException("ID do aluno informado não existe");
         }
-        if (dados.idInstrutor() != null && !instrutorRepository.existsById(dados.idInstrutor())){
+        if (dados.idInstrutor() != null && !instrutorRepository.existsById(dados.idInstrutor())) {
             throw new InstrutorNotFoundException("ID do instrutor informado não existe");
         }
-        // Validações
+        if (dados.idInstrutor() == null && dados.especialidade() == null) {
+            throw new ValidacaoException("Especialidade é obrigatória se o instrutor não for informado");
+        }
+
+        // Os validadores que dependem do instrutor ignoram o caso "instrutor não informado",
+        // pois a escolha automática já considera apenas instrutores ativos e livres.
         validadoresAgendamento.forEach(validador -> validador.validar(dados));
 
         Aluno aluno = alunoRepository.getReferenceById(dados.idAluno());
@@ -45,10 +50,11 @@ public class InstrucaoService {
         return new DadosDetalhamentoAgendamento(salvo);
     }
 
-    public void cancelarInstrucao(Long id){
+    @Transactional
+    public void cancelarInstrucao(Long id) {
         Instrucao instrucao = repository
                 .findById(id)
-                .orElseThrow(() -> new InstrutorNotFoundException("ID do agendamento não existe"));
+                .orElseThrow(() -> new InstrucaoNotFoundException("ID do agendamento não existe"));
         instrucao.cancelar();
         repository.save(instrucao);
     }
@@ -56,9 +62,6 @@ public class InstrucaoService {
     private Instrutor escolherInstrutor(DadosAgendamentoInstrucao dados) {
         if (dados.idInstrutor() != null) {
             return instrutorRepository.getReferenceById(dados.idInstrutor());
-        }
-        if (dados.especialidade() == null) {
-            throw new ValidacaoException("Especialidade é obrigatória se o instrutor não for informado");
         }
         return instrutorRepository.escolherInstrutorAleatorioDisponivel(dados.especialidade(), dados.dataHora());
     }

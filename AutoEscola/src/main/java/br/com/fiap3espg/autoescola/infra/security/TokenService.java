@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Date;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class TokenService {
@@ -47,8 +45,6 @@ public class TokenService {
     }
 
     public Instant dataExpiration() {
-        return LocalDateTime.now()
-                .plusMinutes(30)
-                .toInstant(ZoneOffset.of("-03:00"));
+        return Instant.now().plus(30, ChronoUnit.MINUTES);
     }
 }

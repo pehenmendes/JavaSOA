@@ -13,6 +13,9 @@ public class ValidadorInstrutorAtivo implements ValidadorAgendamento{
 
     @Override
     public void validar(DadosAgendamentoInstrucao dados) {
+        if (dados.idInstrutor() == null) {
+            return;
+        }
         if (instrutorRepository.existsByIdAndAtivoFalse(dados.idInstrutor())) {
             throw new ValidacaoException("Não é possivel agendar instrução com instrutor inativo");
         }

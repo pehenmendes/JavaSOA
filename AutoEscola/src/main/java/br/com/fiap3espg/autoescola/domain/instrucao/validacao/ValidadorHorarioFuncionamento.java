@@ -8,16 +8,16 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 
 @Component
-public class ValidadorHorarioFuncionamento implements ValidadorAgendamento{
+public class ValidadorHorarioFuncionamento implements ValidadorAgendamento {
     @Override
     public void validar(DadosAgendamentoInstrucao dados) {
         LocalDateTime dataEscolhida = dados.dataHora();
         boolean ehDomingo = dataEscolhida.getDayOfWeek().equals(DayOfWeek.SUNDAY);
-        boolean preAbertura = dataEscolhida.getHour() < 6;
-        boolean posFechamento = dataEscolhida.getHour() > 21 - 1;
+        boolean preAbertura = dataEscolhida.getHour() < HorarioFuncionamento.HORA_ABERTURA;
+        boolean posFechamento = dataEscolhida.getHour() > HorarioFuncionamento.ULTIMA_HORA_INICIO;
 
         if (ehDomingo || preAbertura || posFechamento) {
-            throw new ValidacaoException("Tentativa de agendamento fora do horário de funcinamento");
+            throw new ValidacaoException("Tentativa de agendamento fora do horário de funcionamento");
         }
     }
 }

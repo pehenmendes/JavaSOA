@@ -1,11 +1,14 @@
 package br.com.fiap3espg.autoescola.domain.usuario;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 public record DadosAtualizarSenhaUsuario(
-        @NotNull
-        Long id,
+        @NotBlank
         String senhaAtual,
+
+        @NotBlank
+        @Size(min = 6, max = 72)
         String senhaNova
 ) {
 }

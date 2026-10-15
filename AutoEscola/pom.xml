@@ -11,21 +11,8 @@
 	<groupId>br.com.fiap3espg</groupId>
 	<artifactId>AutoEscola</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name/>
-	<description/>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+	<name>AutoEscola</name>
+	<description>API REST para gerenciamento de instruções da Auto Escola</description>
 	<properties>
 		<java.version>25</java.version>
 	</properties>

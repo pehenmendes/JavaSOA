@@ -3,7 +3,6 @@ package br.com.fiap3espg.autoescola.domain.usuario;
 public record DadosDetalhamentoUsuario(
         Long id,
         String login,
-        String senha,
         Role perfil,
         boolean ativo
 ) {
@@ -11,7 +10,6 @@ public record DadosDetalhamentoUsuario(
         this(
                 usuario.getId(),
                 usuario.getLogin(),
-                usuario.getSenha(),
                 usuario.getPerfil(),
                 usuario.isAtivo()
         );

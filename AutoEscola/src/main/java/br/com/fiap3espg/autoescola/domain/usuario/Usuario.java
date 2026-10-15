@@ -55,10 +55,9 @@ public class Usuario implements UserDetails {
         }
     }
 
-    public void atualizarSenha(String senhaAtual, String senhaNova) {
-        if ( (senhaAtual != null && !senhaAtual.isBlank()) &&
-                (senhaNova != null && !senhaNova.isBlank()) ){
-            this.senha = senhaNova;
+    public void atualizarSenha(String senhaCriptografada) {
+        if (senhaCriptografada != null && !senhaCriptografada.isBlank()) {
+            this.senha = senhaCriptografada;
         }
     }
 
@@ -98,9 +97,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        if (!ativo) {
-            return false;
-        }
-        return true;
+        return ativo;
     }
 }

@@ -2,6 +2,7 @@ package br.com.fiap3espg.autoescola.controller;
 
 import br.com.fiap3espg.autoescola.domain.aluno.*;
 import br.com.fiap3espg.autoescola.service.AlunoService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +17,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/alunos")
+@SecurityRequirement(name = "bearer-key")
 @RequiredArgsConstructor
 public class AlunoController {
     private final AlunoService service;

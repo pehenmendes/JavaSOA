@@ -8,12 +8,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class ValidadorConflitoHorarioInstrutor implements ValidadorAgendamento{
+public class ValidadorConflitoHorarioInstrutor implements ValidadorAgendamento {
     private final InstrucaoRepository repository;
 
     @Override
     public void validar(DadosAgendamentoInstrucao dados) {
-        boolean instrutorOcupado = repository.existsByInstrutorIdAndDataHora(dados.idInstrutor(), dados.dataHora());
+        // Sem instrutor informado, a escolha automática já considera apenas instrutores livres.
+        if (dados.idInstrutor() == null) {
+            return;
+        }
+
+        boolean instrutorOcupado = repository
+                .existsByInstrutorIdAndDataHoraAndAtivoTrue(dados.idInstrutor(), dados.dataHora());
 
         if (instrutorOcupado) {
             throw new ValidacaoException("Instrutor ocupado na data/hora escolhida");

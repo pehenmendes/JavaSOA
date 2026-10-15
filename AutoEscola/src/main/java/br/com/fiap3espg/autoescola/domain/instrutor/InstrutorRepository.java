@@ -21,6 +21,8 @@ public interface InstrutorRepository extends JpaRepository<Instrutor, Long> {
             select a.instrutor.id from Instrucao a
             where
             a.dataHora = :dataHora
+            and
+            a.ativo = true
             )
         order by rand()
         limit 1
