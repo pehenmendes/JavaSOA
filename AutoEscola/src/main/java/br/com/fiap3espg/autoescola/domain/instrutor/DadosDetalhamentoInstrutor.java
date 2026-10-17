@@ -5,6 +5,7 @@ import br.com.fiap3espg.autoescola.domain.endereco.DadosEndereco;
 public record DadosDetalhamentoInstrutor(
         Long id,
         String nome,
+        String email,
         String telefone,
         String cnh,
         Especialidade especialidade,
@@ -16,6 +17,7 @@ public record DadosDetalhamentoInstrutor(
                 instrutor.getId(),
                 instrutor.getNome(),
                 instrutor.getEmail(),
+                instrutor.getTelefone(),
                 instrutor.getCnh(),
                 instrutor.getEspecialidade(),
                 new DadosEndereco(instrutor.getEndereco()),

@@ -51,10 +51,13 @@ public class Aluno {
         if(dados.telefone() != null && !dados.telefone().isBlank()) {
             this.telefone = dados.telefone();
         }
+        if (dados.tipoCarta() != null) {
+            this.tipoCarta = dados.tipoCarta();
+        }
         if(dados.endereco() != null) {
             this.endereco.atualizarInformacoes(dados.endereco());
         }
     }
 
     public void excluir() { this.ativo = false; }
-}
+}
